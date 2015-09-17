@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="icon" href="favicon.ico">
+
+    <title>Bath Park and Ride | Site A | Land east of A4/A46 junction</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css" />
+
+    <!-- Custom styles for this template -->
+    <link href="index.css" rel="stylesheet">
+
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
+    <script src="js/leaflet.ajax.min.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <!-- Static navbar -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="/park-and-ride/">Home</a></li>
+              <li><a href="http://www.bathnes.gov.uk/consultations/284601/webform">Respond Online</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Site Information <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="/park-and-ride/site-a">Site A</a></li>
+                  <li><a href="/park-and-ride/site-b">Site B</a></li>
+                  <li><a href="/park-and-ride/site-f">Site F</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+      </nav>
+
+      <!-- Main component for a primary marketing message or call to action -->
+      <div class="container">
+        <h1>Site A Land east of A4/A46 junction</h1>
+
+        <div id="map"></div>
+
+      </div>
+
+      <div class="container">
+
+        <div class="row">
+
+          <div class="col-md-12">
+            <p class="bg-info"><strong>Note</strong> The above map has been recreated from the original images provided by the council. There may be some 
+            minor deviation from the official plans.
+            </p>
+
+          <div>
+            <ul id="myTabs" class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active"><a href="#overview" aria-controls="home" role="tab" data-toggle="tab">Overview</a></li>
+              <li role="presentation"><a href="#detail" aria-controls="profile" role="tab" data-toggle="tab">Report</a></li>
+              <li role="presentation"><a href="#concept" aria-controls="profile" role="tab" data-toggle="tab">Plan</a></li>
+            </ul>
+
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="overview"><h2>Overview</h2></div>
+              <div role="tabpanel" class="tab-pane" id="detail"><h2>Report</h2></div>
+              <div role="tabpanel" class="tab-pane" id="concept">
+                <h3>Plan</h3>
+                <img class="img-responsive center-block" src="img/site-a.jpg">
+              </div>
+            </div>
+          </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Site footer -->
+      <footer class="footer">
+        <p>Created by <a href="http://twitter.com/ldodds">Leigh Dodds</a>. A <a href="http://bathhacked.org">Bath: Hacked</a> project 2015</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <script>
+      $('#myTabs a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+      })
+
+      var map = L.map('map')
+
+      var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+	    var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+	    var osm = new L.TileLayer(osmUrl, {minZoom: 14, maxZoom: 19, attribution: osmAttrib});		
+
+	    // start the map in South-East England
+	    map.setView(new L.LatLng(51.398, -2.329),15);
+	    map.addLayer(osm);
+
+      function popUp(feature, layer) {
+          layer.bindPopup(feature.properties.name);
+      }
+
+      function styleit(feature) {
+        switch (feature.properties.name) {
+          case 'Site A': return {color: "#ff0000"};
+          default:   return {color: "#76A8F5"};
+        }
+      }
+
+      var geojsonLayer = new L.GeoJSON.AJAX("park-and-ride.geojson", {onEachFeature:popUp, style: styleit});       
+      geojsonLayer.addTo(map);
+
+    </script>
+
+  </body>
+</html>
+
